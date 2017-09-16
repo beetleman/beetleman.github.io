@@ -75,6 +75,8 @@ pagination_dir: page
 theme: cactus-dark
 
 # Deployment
-## Docs: https://hexo.io/docs/deployment.html
+## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: git@github.com:beetleman/beetleman.github.io.git
+  branch: master
