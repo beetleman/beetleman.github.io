@@ -26,7 +26,7 @@ I saw a lot of benchmarks and most of them don't check how app scale if we depen
 
 # How?
 
-For this benchmark I implemented simple hello-word aplication in each micro-framework but with one twist. Every app accept GET param `delay` and this value is used to symulate delay. For implementing delay I used best methid for each platform but I thing async [Python] have adventage in this example because `await asyncio.sleep(delay)` is lot quicker than [Clojure] `(Thread/sleep delay)` and it's works more like synchronous `time.sleep(delay)` from synchronous [Python].
+For this benchmark I implemented simple hello-word application in each micro-framework but with one twist. Every app accept GET param `delay` and this value is used to simulate delay. For implementing delay I used best method for each platform but I thing async [Python] have advantage in this example because `await asyncio.sleep(delay)` is lot quicker than [Clojure] `(Thread/sleep delay)` and it's works more like synchronous `time.sleep(delay)` from synchronous [Python].
 
 # Implementations
 
@@ -63,7 +63,7 @@ app.router.add_get('/', index)
 
 ## Luminus
 
-[Luminus] is more project template than micro-framerok in my opinion and generate a lot of unnecesary files. But it's extreamply simple to start:
+[Luminus] is more project template than micro-framework in my opinion and generate a lot of unnecessary files. But it's extremely simple to start:
 
 ```bash
 lein new luminus <your project name> +service
@@ -110,7 +110,7 @@ It's have less lines than [Luminus] implementation but have save functionality a
 
 ## Yada
 
-[Yada] yada yada... I really like idea behind yada and its some how similar to [Aiohttp] and [Flask]. But its asynchronous by design and have goal to be compilance with HTTP standards. Implementation:
+[Yada] yada yada... I really like idea behind yada and its some how similar to [Aiohttp] and [Flask]. But its asynchronous by design and have goal to be compliance with HTTP standards. Implementation:
 
 ```clojure
 (defn hello-response [ctx]
@@ -137,19 +137,19 @@ Again more code then [Python] but code is more declarative in my opinion and we 
 
 # Benchmark
 
-For benchamrking i used [wrk] with this set op parametrs:
+For benchmark i used [wrk] with this set op parameters:
 
 ```bash
 wrk -t12 -c1000 -d60s -s report.lua http://localhost:8080/?delay=$delay
 ```
 
-Where `report.lua` is little script generating csv from test and it's avialable in [benchmark] repo. Beffor etch test [wrk] is used without lua script for warm up [JVM] (its not needed for [Python]).
+Where `report.lua` is little script generating csv from test and it's available in [benchmark] repo. Before etch test [wrk] is used without lua script for warm up [JVM] (its not needed for [Python]).
 
-[Python] implementations was runned on [gunicorn] using `number_of_cpu_cores*2` workers. It should give [Python] equal chance vs [JVM].
+[Python] implementations was run on [gunicorn] using `number_of_cpu_cores*2` workers. It should give [Python] equal chance vs [JVM].
 
 # Results
 
-For first run I got suprising resuls because [Yada] was only faster than [Flask]:
+For first run I got surprising results because [Yada] was only faster than [Flask]:
 
 ## Aiohttp
 
@@ -193,7 +193,7 @@ Requests/sec:    687.52
 Transfer/sec:    115.48KB
 ```
 
-## Luminus (immutant)
+## Luminus (Immutant)
 
 ```
 Running 1m test @ http://localhost:8080/?delay=0
@@ -221,15 +221,15 @@ Requests/sec:   8867.34
 Transfer/sec:      2.14MB
 ```
 
-All timeout i thik are because [Yada] have many interceptors (similar to middlewares in other framework) by default so its do more than others in this example. I do more tests with delays from 0 to 400ms. I presents only charts because are more redable but all data are available in [repo]
+All timeout i think are because [Yada] have many interceptors (similar to middlewares in other framework) by default so its do more than others in this example. I do more tests with delays from 0 to 400ms. I presents only charts because are more readable but all data are available in [repo]
 
 {% asset_img requests_per_sec.png Request per second %}
 
-During tests with bigers delay interceptors overload are less visable and around 400ms are not visable at all. But steal [catacumba] is beast if we care only about performance and [Aiohttp] with delays is as good as [catacumba].. big suprise!!
+During tests with bigger delay interceptors overload are less visible and around 400ms are not visible at all. But steal [catacumba] is beast if we care only about performance and [Aiohttp] with delays is as good as [catacumba].. big sunrise!!
 
 {% asset_img latency.png Latency %}
 
-If delay grows only [Catacumba], [Yada] and [Aiohttp] have aceptable latency.
+If delay grows only [Catacumba], [Yada] and [Aiohttp] have acceptably latency.
 
 {% asset_img all_errors.png All errors %}
 
@@ -237,7 +237,7 @@ level of HTTP errors for big 3 are on similar level if delays grows.
 
 # Conclusion
 
-I i must choice i will choise betwen [Yada], [Catacumba] and [Aiohttp]. [Catacumba] is extremely fase but new and ofer much less than [Yada] in my opinion so for me is more about [Yada] vs [Aiohttp]. For simple things I think [Aiohttp] is best choice posible but for bigger meayby [Yada] is better not only because [clojure] and [JVM] are better than [Python] in my opinion. I ill try implement more real live example in both and check if [Aiohttp] is steal winner in term of performance and code simplecity.
+I i must choice i will chose bet wen [Yada], [Catacumba] and [Aiohttp]. [Catacumba] is extremely fast but new and offer much less than [Yada] in my opinion so for me is more about [Yada] vs [Aiohttp]. For simple things I think [Aiohttp] is best choice possible but for bigger may be [Yada] is better not only because [clojure] and [JVM] are better than [Python] in my opinion. I ill try implement more real live example in both and check if [Aiohttp] is steal winner in term of performance and code simplicity.
 
 # Source Code
 
