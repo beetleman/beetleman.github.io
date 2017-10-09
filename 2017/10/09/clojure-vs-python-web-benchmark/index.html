@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Why?I’m a web developer and I want to know which tool I should use in a given situation in the back-end. I have 3 languages in my arsenal: Clojure, JavaScript and Python so this post will be about Pyt">
+<meta name="keywords" content="python,clojure,yada,luminus,flask,aiohttp,catacumba">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Clojure vs Python web benchmark">
+<meta property="og:url" content="https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/index.html">
+<meta property="og:site_name" content="DysFunctional Programer">
+<meta property="og:description" content="Why?I’m a web developer and I want to know which tool I should use in a given situation in the back-end. I have 3 languages in my arsenal: Clojure, JavaScript and Python so this post will be about Pyt">
+<meta property="og:image" content="https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/requests_per_sec.png">
+<meta property="og:image" content="https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/latency.png">
+<meta property="og:image" content="https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/all_errors.png">
+<meta property="og:updated_time" content="2017-10-09T19:20:39.139Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Clojure vs Python web benchmark">
+<meta name="twitter:description" content="Why?I’m a web developer and I want to know which tool I should use in a given situation in the back-end. I have 3 languages in my arsenal: Clojure, JavaScript and Python so this post will be about Pyt">
+<meta name="twitter:image" content="https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/requests_per_sec.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Clojure vs Python web benchmark</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/beetleman">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2017/09/16/hello-world/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&text=Clojure vs Python web benchmark"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&is_video=false&description=Clojure vs Python web benchmark"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Clojure vs Python web benchmark&body=Check out this article: https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&name=Clojure vs Python web benchmark&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Why"><span class="toc-number">1.</span> <span class="toc-text">Why?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#How"><span class="toc-number">2.</span> <span class="toc-text">How?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Implementations"><span class="toc-number">3.</span> <span class="toc-text">Implementations</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Flask"><span class="toc-number">3.1.</span> <span class="toc-text">Flask</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Aiohttp"><span class="toc-number">3.2.</span> <span class="toc-text">Aiohttp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Luminus"><span class="toc-number">3.3.</span> <span class="toc-text">Luminus</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Catacumba"><span class="toc-number">3.4.</span> <span class="toc-text">Catacumba</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Yada"><span class="toc-number">3.5.</span> <span class="toc-text">Yada</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Benchmark"><span class="toc-number">4.</span> <span class="toc-text">Benchmark</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Results"><span class="toc-number">5.</span> <span class="toc-text">Results</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Aiohttp-1"><span class="toc-number">5.1.</span> <span class="toc-text">Aiohttp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Catacumba-1"><span class="toc-number">5.2.</span> <span class="toc-text">Catacumba</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flask-1"><span class="toc-number">5.3.</span> <span class="toc-text">Flask</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Luminus-Immutant"><span class="toc-number">5.4.</span> <span class="toc-text">Luminus (Immutant)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Yada-1"><span class="toc-number">5.5.</span> <span class="toc-text">Yada</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number">6.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Source-Code"><span class="toc-number">7.</span> <span class="toc-text">Source Code</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Clojure vs Python web benchmark
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">DysFunctional Programer</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-10-09T19:20:39.000Z" itemprop="datePublished">2017-10-09</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/aiohttp/">aiohttp</a>, <a class="tag-link" href="/tags/catacumba/">catacumba</a>, <a class="tag-link" href="/tags/clojure/">clojure</a>, <a class="tag-link" href="/tags/flask/">flask</a>, <a class="tag-link" href="/tags/luminus/">luminus</a>, <a class="tag-link" href="/tags/python/">python</a>, <a class="tag-link" href="/tags/yada/">yada</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Why"><a href="#Why" class="headerlink" title="Why?"></a>Why?</h1><p>I’m a web developer and I want to know which tool I should use in a given situation in the back-end. I have 3 languages in my arsenal: <a href="https://clojure.org" target="_blank" rel="external">Clojure</a>, JavaScript and <a href="https://www.python.org" target="_blank" rel="external">Python</a> so this post will be about <a href="https://www.python.org" target="_blank" rel="external">Python</a> and Clojure because i don’t like JS :D.  I will check the performance of my favorite <a href="https://www.python.org" target="_blank" rel="external">python</a> and clojure micro-frameworks:</p>
+<ul>
+<li><a href="https://www.python.org" target="_blank" rel="external">Python</a><ul>
+<li><a href="http://flask.pocoo.org/" target="_blank" rel="external">flask</a></li>
+<li><a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">aiohttp</a></li>
+</ul>
+</li>
+<li><a href="https://clojure.org" target="_blank" rel="external">Clojure</a><ul>
+<li><a href="http://www.luminusweb.net/" target="_blank" rel="external">luminus</a></li>
+<li><a href="https://funcool.github.io/catacumba/latest/" target="_blank" rel="external">catacumba</a></li>
+<li><a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">yada</a></li>
+</ul>
+</li>
+</ul>
+<p>I saw a lot of benchmarks and most of them don’t check how app scale if we depends on slow service/db. For me it’s really important because in micro-services world one will always depend on othe services.</p>
+<h1 id="How"><a href="#How" class="headerlink" title="How?"></a>How?</h1><p>For this benchmark I implemented simple hello-word application in each micro-framework but with one twist. Every app accept GET param <code>delay</code> and this value is used to simulate delay. For implementing delay I used best method for each platform but I thing async <a href="https://www.python.org" target="_blank" rel="external">Python</a> have advantage in this example because <code>await asyncio.sleep(delay)</code> is a lot quicker than <a href="https://clojure.org" target="_blank" rel="external">Clojure</a> <code>(Thread/sleep delay)</code> and it works more like synchronous <code>time.sleep(delay)</code> from synchronous <a href="https://www.python.org" target="_blank" rel="external">Python</a>.</p>
+<h1 id="Implementations"><a href="#Implementations" class="headerlink" title="Implementations"></a>Implementations</h1><p>I skip details and provide only router/response part of each app.</p>
+<h2 id="Flask"><a href="#Flask" class="headerlink" title="Flask"></a>Flask</h2><p><a href="http://flask.pocoo.org/" target="_blank" rel="external">Flask</a> is synchronous <a href="https://www.python.org" target="_blank" rel="external">Python</a> micro-framework and implementing hello-world as easy as:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">app = Flask(__name__)</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@app.route("/")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></div><div class="line">    delay = request.args.get(<span class="string">'delay'</span>)</div><div class="line">    time.sleep(toInt(delay)/<span class="number">1000</span>)</div><div class="line">    <span class="keyword">return</span> <span class="string">"hello world!"</span></div></pre></td></tr></table></figure>
+<h2 id="Aiohttp"><a href="#Aiohttp" class="headerlink" title="Aiohttp"></a>Aiohttp</h2><p><a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">Aiohttp</a> is asynchronous <a href="https://www.python.org" target="_blank" rel="external">Python</a> micro-framework and it’s somehow similar to <a href="http://flask.pocoo.org/" target="_blank" rel="external">Flask</a>:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></div><div class="line">    delay = request.GET.get(<span class="string">'delay'</span>)</div><div class="line">    <span class="keyword">await</span> asyncio.sleep(toInt(delay)/<span class="number">1000</span>)</div><div class="line">    <span class="keyword">return</span> web.Response(text=<span class="string">"hello world!"</span>)</div><div class="line"></div><div class="line"></div><div class="line">app = web.Application()</div><div class="line">app.router.add_get(<span class="string">'/'</span>, index)</div></pre></td></tr></table></figure>
+<h2 id="Luminus"><a href="#Luminus" class="headerlink" title="Luminus"></a>Luminus</h2><p><a href="http://www.luminusweb.net/" target="_blank" rel="external">Luminus</a> is more project template than micro-framework in my opinion and generate a lot of unnecessary files but it’s extremely simple to start:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lein new luminus &lt;your project name&gt; +service</div></pre></td></tr></table></figure>
+<p>and we have service with swagger and docker file. As default web server <a href="http://www.luminusweb.net/" target="_blank" rel="external">Luminus</a> use <a href="http://immutant.org/" target="_blank" rel="external">Immutant</a> with is based on <a href="http://undertow.io/" target="_blank" rel="external">Undertow</a>. Implementation:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">(<span class="name"><span class="builtin-name">defn</span></span> hello-handler [delay]</div><div class="line">  (<span class="name">Thread/sleep</span> delay)</div><div class="line">  <span class="string">"hello world!"</span>)</div><div class="line"></div><div class="line">(<span class="name">defapi</span> service-routes</div><div class="line">  &#123;<span class="symbol">:swagger</span> &#123;<span class="symbol">:ui</span> <span class="string">"/swagger-ui"</span></div><div class="line">             <span class="symbol">:spec</span> <span class="string">"/swagger.json"</span></div><div class="line">             <span class="symbol">:data</span> &#123;<span class="symbol">:info</span> &#123;<span class="symbol">:version</span> <span class="string">"1.0.0"</span></div><div class="line">                           <span class="symbol">:title</span> <span class="string">"Sample API"</span></div><div class="line">                           <span class="symbol">:description</span> <span class="string">"Sample Services"</span>&#125;&#125;&#125;&#125;</div><div class="line"></div><div class="line">  (<span class="name">GET</span> <span class="string">"/"</span> []</div><div class="line">       <span class="symbol">:query-params</span> [&#123;delay <span class="symbol">:-</span> Long <span class="number">0</span>&#125;]</div><div class="line">       <span class="symbol">:return</span> String</div><div class="line">       (<span class="name">ok</span> (<span class="name">hello-handler</span> delay))))</div></pre></td></tr></table></figure>
+<p>it’s more LOC than <a href="https://www.python.org" target="_blank" rel="external">Python</a> but we have field validation and swagger.</p>
+<h2 id="Catacumba"><a href="#Catacumba" class="headerlink" title="Catacumba"></a>Catacumba</h2><p><a href="https://funcool.github.io/catacumba/latest/" target="_blank" rel="external">Catacumba</a> is a new player in <a href="https://clojure.org" target="_blank" rel="external">Clojure</a> world. It’s based on <a href="https://ratpack.io/" target="_blank" rel="external">Ratpack</a> and It’s asynchronous. Implementation:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(<span class="name"><span class="builtin-name">defn</span></span> hello-handler [ctx]</div><div class="line">  (<span class="name"><span class="builtin-name">let</span></span> [delay (<span class="name"><span class="builtin-name">-&gt;</span></span> ctx <span class="symbol">:query-params</span> <span class="symbol">:delay</span> str-&gt;int)</div><div class="line">        result (<span class="name">d/future</span></div><div class="line">                 (<span class="name">Thread/sleep</span> delay)</div><div class="line">                 <span class="string">"hello world!"</span>)]</div><div class="line">    result))</div><div class="line"></div><div class="line">(<span class="name"><span class="builtin-name">defn</span></span> routes [base]</div><div class="line">  (<span class="name">ct/routes</span> [</div><div class="line">              [<span class="symbol">:get</span> <span class="string">""</span> hello-handler]]))</div></pre></td></tr></table></figure>
+<p>It has less lines than <a href="http://www.luminusweb.net/" target="_blank" rel="external">Luminus</a> implementation but saves functionality as <a href="https://www.python.org" target="_blank" rel="external">Python</a> implementations(no validation, no swagger).</p>
+<h2 id="Yada"><a href="#Yada" class="headerlink" title="Yada"></a>Yada</h2><p><a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a> yada yada… is library for implementing web apps using data (read more about it in <a href="https://juxt.pro/yada/manual/index.html#introduction" target="_blank" rel="external">Yada introduction</a>). I really like idea behind <a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a>:</p>
+<blockquote>
+<ul>
+<li>Be easy to use for intermediate Clojure developers</li>
+<li>Comprehensive compliance with HTTP standards over pragmatism and performance</li>
+<li>Increase productivity through re-use</li>
+<li>Handle large workloads with reasonable performance</li>
+<li>Support multiple architectural styles, including Hypermedia APIs (REST)<br>– <cite><a href="https://juxt.pro/yada/manual/index.html#_design_goals" target="_blank" rel="external">Yada design goals</a></cite></li>
+</ul>
+</blockquote>
+<p>and how is similar to <a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">Aiohttp</a>:</p>
+<ul>
+<li>asynchronous</li>
+<li>have HTTP client because is based on <a href="http://aleph.io/" target="_blank" rel="external">Aleph</a> which have one</li>
+</ul>
+<p>Implementation:</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">(<span class="name"><span class="builtin-name">defn</span></span> hello-response [ctx]</div><div class="line">  (<span class="name"><span class="builtin-name">let</span></span> [delay  (<span class="name"><span class="builtin-name">get-in</span></span> ctx [<span class="symbol">:parameters</span> <span class="symbol">:query</span> <span class="symbol">:delay</span>])</div><div class="line">        result (<span class="name">d/future</span></div><div class="line">                 (<span class="name">Thread/sleep</span> delay)</div><div class="line">                 <span class="string">"hello world!"</span>)]</div><div class="line">    result))</div><div class="line"></div><div class="line">(<span class="name"><span class="builtin-name">def</span></span> hello-resource</div><div class="line">  (<span class="name">yada/resource</span></div><div class="line">   &#123;<span class="symbol">:methods</span> &#123;<span class="symbol">:get</span></div><div class="line">              &#123;<span class="symbol">:parameters</span> &#123;<span class="symbol">:query</span> &#123;<span class="symbol">:delay</span> s/Int&#125;&#125;</div><div class="line">               <span class="symbol">:produces</span>   &#123;<span class="symbol">:media-type</span> <span class="string">"text/plain"</span>&#125;</div><div class="line">               <span class="symbol">:response</span>   hello-response&#125;&#125;&#125;))</div><div class="line"></div><div class="line">(<span class="name"><span class="builtin-name">defn</span></span> routes [base]</div><div class="line">  [base</div><div class="line">   [</div><div class="line">    [<span class="string">""</span> hello-resource]</div><div class="line">    [<span class="literal">true</span> (<span class="name">yada/as-resource</span> <span class="literal">nil</span>)]]])</div></pre></td></tr></table></figure>
+<p>Again more code then <a href="https://www.python.org" target="_blank" rel="external">Python</a> but code is more declarative in my opinion and we have query validation build-in.</p>
+<h1 id="Benchmark"><a href="#Benchmark" class="headerlink" title="Benchmark"></a>Benchmark</h1><p>For benchmark I used <a href="https://github.com/wg/wrk" target="_blank" rel="external">wrk</a> with this set op parameters:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wrk -t12 -c1000 -d60s -s report.lua http://localhost:8080/?delay=<span class="variable">$delay</span></div></pre></td></tr></table></figure>
+<p>Where <code>report.lua</code> is little script generating csv from test and it’s available in <a href="https://github.com/beetleman/clojure-vs-Python-web-benchmark" target="_blank" rel="external">benchmark</a> repo. Before each test <a href="https://github.com/wg/wrk" target="_blank" rel="external">wrk</a> is used without lua script for warm up <a href="http://openjdk.java.net" target="_blank" rel="external">JVM</a> (its not needed for <a href="https://www.python.org" target="_blank" rel="external">Python</a>).</p>
+<p><a href="https://www.python.org" target="_blank" rel="external">Python</a> implementations were run on <a href="http://gunicorn.org" target="_blank" rel="external">gunicorn</a> using <code>number_of_cpu_cores*2</code> workers. This should give <a href="https://www.python.org" target="_blank" rel="external">Python</a> equal chance vs <a href="http://openjdk.java.net" target="_blank" rel="external">JVM</a>.</p>
+<h1 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h1><p>For the first run I got surprising results because <a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a> was faster than <a href="http://flask.pocoo.org/" target="_blank" rel="external">Flask</a> only:</p>
+<h2 id="Aiohttp-1"><a href="#Aiohttp-1" class="headerlink" title="Aiohttp"></a>Aiohttp</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Running 1m test @ http://localhost:8080/?delay=0</div><div class="line">  12 threads and 1000 connections</div><div class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</div><div class="line">    Latency    77.29ms   43.31ms 294.88ms   65.91%</div><div class="line">    Req/Sec     1.10k   369.46     3.74k    71.47%</div><div class="line">  786155 requests in 1.00m, 122.96MB read</div><div class="line">Requests/sec:  13084.33</div><div class="line">Transfer/sec:      2.05MB</div></pre></td></tr></table></figure>
+<h2 id="Catacumba-1"><a href="#Catacumba-1" class="headerlink" title="Catacumba"></a>Catacumba</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Running 1m test @ http://localhost:8080/?delay=0</div><div class="line">  12 threads and 1000 connections</div><div class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</div><div class="line">    Latency    34.96ms   30.03ms 965.51ms   91.57%</div><div class="line">    Req/Sec     2.58k   370.05     5.92k    88.60%</div><div class="line">  1846723 requests in 1.00m, 158.51MB read</div><div class="line">  Non-2xx or 3xx responses: 1</div><div class="line">Requests/sec:  30736.96</div><div class="line">Transfer/sec:      2.64MB</div></pre></td></tr></table></figure>
+<h2 id="Flask-1"><a href="#Flask-1" class="headerlink" title="Flask"></a>Flask</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">flask-app</div><div class="line">Running 1m test @ http://localhost:8080/?delay=0</div><div class="line">  12 threads and 1000 connections</div><div class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</div><div class="line">    Latency   111.64ms  132.68ms   1.99s    96.28%</div><div class="line">    Req/Sec    97.81    131.25     1.13k    93.16%</div><div class="line">  41315 requests in 1.00m, 6.78MB read</div><div class="line">  Socket errors: connect 0, read 12, write 0, timeout 594</div><div class="line">Requests/sec:    687.52</div><div class="line">Transfer/sec:    115.48KB</div></pre></td></tr></table></figure>
+<h2 id="Luminus-Immutant"><a href="#Luminus-Immutant" class="headerlink" title="Luminus (Immutant)"></a>Luminus (Immutant)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Running 1m test @ http://localhost:8080/?delay=0</div><div class="line">  12 threads and 1000 connections</div><div class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</div><div class="line">    Latency    94.16ms  133.16ms   1.58s    97.87%</div><div class="line">    Req/Sec     1.09k   159.41     2.13k    86.47%</div><div class="line">  732819 requests in 1.00m, 248.80MB read</div><div class="line">  Socket errors: connect 0, read 0, write 0, timeout 996</div><div class="line">Requests/sec:  12193.31</div><div class="line">Transfer/sec:      4.14MB</div></pre></td></tr></table></figure>
+<h2 id="Yada-1"><a href="#Yada-1" class="headerlink" title="Yada"></a>Yada</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Running 1m test @ http://localhost:8080/?delay=0</div><div class="line">  12 threads and 1000 connections</div><div class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</div><div class="line">    Latency   151.23ms  235.77ms   1.99s    88.18%</div><div class="line">    Req/Sec   750.00    288.08     2.09k    71.45%</div><div class="line">  532697 requests in 1.00m, 128.68MB read</div><div class="line">  Socket errors: connect 0, read 0, write 0, timeout 658</div><div class="line">  Non-2xx or 3xx responses: 243</div><div class="line">Requests/sec:   8867.34</div><div class="line">Transfer/sec:      2.14MB</div></pre></td></tr></table></figure>
+<p>In my opinion all timeouts are because <a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a> has many interceptors (similar to middlewares in other framework) by default so It does more than others in this example. I did more tests with delays from 0 to 400ms. I present only charts because they are more readable but all data are available in <a href="https://github.com/beetleman/clojure-vs-Python-web-benchmark" target="_blank" rel="external">repo</a></p>
+<img src="/2017/10/09/clojure-vs-python-web-benchmark/requests_per_sec.png" alt="Request per second" title="Request per second">
+<p>During tests with bigger delay interceptors overload are less visible and around 400ms are not visible at all. But still <a href="https://funcool.github.io/catacumba/latest/" target="_blank" rel="external">catacumba</a> is the beast if we care only about performance and <a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">Aiohttp</a> with delays is as good as <a href="https://funcool.github.io/catacumba/latest/" target="_blank" rel="external">catacumba</a>.. big surprise!!</p>
+<img src="/2017/10/09/clojure-vs-python-web-benchmark/latency.png" alt="Latency" title="Latency">
+<p>If delay grows only <a href="https://funcool.github.io/catacumba/latest/" target="_blank" rel="external">Catacumba</a>, <a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a> and <a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">Aiohttp</a> have acceptable latency.</p>
+<img src="/2017/10/09/clojure-vs-python-web-benchmark/all_errors.png" alt="All errors" title="All errors">
+<p>level of HTTP errors for the big 3 are on a similar level if delays grows.</p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>If I must choose I will pick between <a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a>, <a href="https://funcool.github.io/catacumba/latest/" target="_blank" rel="external">Catacumba</a> and <a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">Aiohttp</a>. <a href="https://funcool.github.io/catacumba/latest/" target="_blank" rel="external">Catacumba</a> is extremely fast but new and offer much less than <a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a> in my opinion so for me It is more about <a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a> vs <a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">Aiohttp</a>. For simple things I think <a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">Aiohttp</a> is the best choice possible but for bigger maybe <a href="https://juxt.pro/yada/index.html" target="_blank" rel="external">Yada</a> is better. I will try to implement more real live examples in both and check if <a href="https://aiohttp.readthedocs.io/en/stable/index.html" target="_blank" rel="external">Aiohttp</a> is still the winner in terms of performance and code simplicity.</p>
+<h1 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h1><p>You can generate/experiment with data on your own using code from <a href="https://github.com/beetleman/clojure-vs-Python-web-benchmark" target="_blank" rel="external">benchmark</a> repo.</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/beetleman">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Why"><span class="toc-number">1.</span> <span class="toc-text">Why?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#How"><span class="toc-number">2.</span> <span class="toc-text">How?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Implementations"><span class="toc-number">3.</span> <span class="toc-text">Implementations</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Flask"><span class="toc-number">3.1.</span> <span class="toc-text">Flask</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Aiohttp"><span class="toc-number">3.2.</span> <span class="toc-text">Aiohttp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Luminus"><span class="toc-number">3.3.</span> <span class="toc-text">Luminus</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Catacumba"><span class="toc-number">3.4.</span> <span class="toc-text">Catacumba</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Yada"><span class="toc-number">3.5.</span> <span class="toc-text">Yada</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Benchmark"><span class="toc-number">4.</span> <span class="toc-text">Benchmark</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Results"><span class="toc-number">5.</span> <span class="toc-text">Results</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Aiohttp-1"><span class="toc-number">5.1.</span> <span class="toc-text">Aiohttp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Catacumba-1"><span class="toc-number">5.2.</span> <span class="toc-text">Catacumba</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flask-1"><span class="toc-number">5.3.</span> <span class="toc-text">Flask</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Luminus-Immutant"><span class="toc-number">5.4.</span> <span class="toc-text">Luminus (Immutant)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Yada-1"><span class="toc-number">5.5.</span> <span class="toc-text">Yada</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number">6.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Source-Code"><span class="toc-number">7.</span> <span class="toc-text">Source Code</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&text=Clojure vs Python web benchmark"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&is_video=false&description=Clojure vs Python web benchmark"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Clojure vs Python web benchmark&body=Check out this article: https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&title=Clojure vs Python web benchmark"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://beetleman.github.io/2017/10/09/clojure-vs-python-web-benchmark/&name=Clojure vs Python web benchmark&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2017 Mateusz Probachta (aka beetleman)
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/beetleman">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/Fantasque_Sans_Mono/stylesheet.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-106611993-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+
