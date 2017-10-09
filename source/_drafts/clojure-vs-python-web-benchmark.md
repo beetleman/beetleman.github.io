@@ -110,7 +110,23 @@ It has less lines than [Luminus] implementation but saves functionality as [Pyth
 
 ## Yada
 
-[Yada] yada yada... I really like idea behind yada and its some how similar to [Aiohttp] and [Flask]. But its asynchronous by design and have goal to be compliance with HTTP standards. Implementation:
+[Yada] yada yada... is library for implementing web apps using data (read more about it in [Yada introduction]). I really like idea behind [Yada]:
+
+> - Be easy to use for intermediate Clojure developers
+> - Comprehensive compliance with HTTP standards over pragmatism and performance
+> - Increase productivity through re-use
+> - Handle large workloads with reasonable performance
+> - Support multiple architectural styles, including Hypermedia APIs (REST)
+> -- <cite>[Yada design goals]</cite>
+
+[1]:http://www.quotedb.com/quotes/2112
+
+and how is similar to [Aiohttp]:
+
+- asynchronous
+- have HTTP client because is based on [Aleph] which have one
+
+Implementation:
 
 ```clojure
 (defn hello-response [ctx]
@@ -250,6 +266,8 @@ You can generate/experiment with data on your own using code from [benchmark] re
 [aiohttp]: https://aiohttp.readthedocs.io/en/stable/index.html
 [luminus]: http://www.luminusweb.net/
 [yada]: https://juxt.pro/yada/index.html
+[Yada design goals]: https://juxt.pro/yada/manual/index.html#_design_goals
+[yada introduction]: https://juxt.pro/yada/manual/index.html#introduction
 [catacumba]: https://funcool.github.io/catacumba/latest/
 [ratpack]: https://ratpack.io/
 [immutant]: http://immutant.org/
