@@ -12,7 +12,7 @@ tags:
 
 # Why?
 
-I'm web developer and I want to know which tool I should use in given situation for back-end. I have 3 languages in my belt: [Clojure], JavaScript and [Python] so this post will be about [Python] and clojure because i don't like JS:D.  I will check performance of my favorite [python] and clojure micro-frameworks:
+I'm a web developer and I want to know which tool I should use in a given situation in the back-end. I have 3 languages in my arsenal: [Clojure], JavaScript and [Python] so this post will be about [Python] and Clojure because i don't like JS :D.  I will check the performance of my favorite [python] and clojure micro-frameworks:
 
 - [Python]
   - [flask]
@@ -22,19 +22,19 @@ I'm web developer and I want to know which tool I should use in given situation 
   - [catacumba]
   - [yada]
 
-I saw a lot of benchmarks and most of them don't check how app scale if we depends on slow service/db. For me it's really important because in micro-service word You will always depend on other services.
+I saw a lot of benchmarks and most of them don't check how app scale if we depends on slow service/db. For me it's really important because in micro-services world one will always depend on othe services.
 
 # How?
 
-For this benchmark I implemented simple hello-word application in each micro-framework but with one twist. Every app accept GET param `delay` and this value is used to simulate delay. For implementing delay I used best method for each platform but I thing async [Python] have advantage in this example because `await asyncio.sleep(delay)` is lot quicker than [Clojure] `(Thread/sleep delay)` and it's works more like synchronous `time.sleep(delay)` from synchronous [Python].
+For this benchmark I implemented simple hello-word application in each micro-framework but with one twist. Every app accept GET param `delay` and this value is used to simulate delay. For implementing delay I used best method for each platform but I thing async [Python] have advantage in this example because `await asyncio.sleep(delay)` is a lot quicker than [Clojure] `(Thread/sleep delay)` and it works more like synchronous `time.sleep(delay)` from synchronous [Python].
 
 # Implementations
 
-I will skip details and only router/response part of each app.
+I skip details and provide only router/response part of each app.
 
 ## Flask
 
-[Flask] is synchronous [Python] micro-framework and implementing hello-world id easy as:
+[Flask] is synchronous [Python] micro-framework and implementing hello-world as easy as:
 
 ```python
 app = Flask(__name__)
@@ -48,7 +48,7 @@ def hello():
 ```
 ## Aiohttp
 
-[Aiohttp] is asynchronous [Python] micro-framework and it's some how similar to [Flask]:
+[Aiohttp] is asynchronous [Python] micro-framework and it's somehow similar to [Flask]:
 
 ```python
 async def index(request):
@@ -63,7 +63,7 @@ app.router.add_get('/', index)
 
 ## Luminus
 
-[Luminus] is more project template than micro-framework in my opinion and generate a lot of unnecessary files. But it's extremely simple to start:
+[Luminus] is more project template than micro-framework in my opinion and generate a lot of unnecessary files but it's extremely simple to start:
 
 ```bash
 lein new luminus <your project name> +service
@@ -92,7 +92,7 @@ it's more LOC than [Python] but we have field validation and swagger.
 
 ## Catacumba
 
-[Catacumba] is new player in [Clojure] word its based on [Ratpack] and its asynchronous. Implementation:
+[Catacumba] is a new player in [Clojure] world. It's based on [Ratpack] and It's asynchronous. Implementation:
 
 ```clojure
 (defn hello-handler [ctx]
@@ -106,7 +106,7 @@ it's more LOC than [Python] but we have field validation and swagger.
   (ct/routes [
               [:get "" hello-handler]]))
 ```
-It's have less lines than [Luminus] implementation but have save functionality as [Python] implementations(no validation, no swagger).
+It has less lines than [Luminus] implementation but saves functionality as [Python] implementations(no validation, no swagger).
 
 ## Yada
 
@@ -133,23 +133,23 @@ It's have less lines than [Luminus] implementation but have save functionality a
     ["" hello-resource]
     [true (yada/as-resource nil)]]])
 ```
-Again more code then [Python] but code is more declarative in my opinion and we have query validation build in.
+Again more code then [Python] but code is more declarative in my opinion and we have query validation build-in.
 
 # Benchmark
 
-For benchmark i used [wrk] with this set op parameters:
+For benchmark I used [wrk] with this set op parameters:
 
 ```bash
 wrk -t12 -c1000 -d60s -s report.lua http://localhost:8080/?delay=$delay
 ```
 
-Where `report.lua` is little script generating csv from test and it's available in [benchmark] repo. Before etch test [wrk] is used without lua script for warm up [JVM] (its not needed for [Python]).
+Where `report.lua` is little script generating csv from test and it's available in [benchmark] repo. Before each test [wrk] is used without lua script for warm up [JVM] (its not needed for [Python]).
 
-[Python] implementations was run on [gunicorn] using `number_of_cpu_cores*2` workers. It should give [Python] equal chance vs [JVM].
+[Python] implementations were run on [gunicorn] using `number_of_cpu_cores*2` workers. This should give [Python] equal chance vs [JVM].
 
 # Results
 
-For first run I got surprising results because [Yada] was only faster than [Flask]:
+For the first run I got surprising results because [Yada] was faster than [Flask] only:
 
 ## Aiohttp
 
@@ -221,27 +221,27 @@ Requests/sec:   8867.34
 Transfer/sec:      2.14MB
 ```
 
-All timeout i think are because [Yada] have many interceptors (similar to middlewares in other framework) by default so its do more than others in this example. I do more tests with delays from 0 to 400ms. I presents only charts because are more readable but all data are available in [repo]
+In my opinion all timeouts are because [Yada] has many interceptors (similar to middlewares in other framework) by default so It does more than others in this example. I did more tests with delays from 0 to 400ms. I present only charts because they are more readable but all data are available in [repo]
 
 {% asset_img requests_per_sec.png Request per second %}
 
-During tests with bigger delay interceptors overload are less visible and around 400ms are not visible at all. But steal [catacumba] is beast if we care only about performance and [Aiohttp] with delays is as good as [catacumba].. big sunrise!!
+During tests with bigger delay interceptors overload are less visible and around 400ms are not visible at all. But still [catacumba] is the beast if we care only about performance and [Aiohttp] with delays is as good as [catacumba].. big surprise!!
 
 {% asset_img latency.png Latency %}
 
-If delay grows only [Catacumba], [Yada] and [Aiohttp] have acceptably latency.
+If delay grows only [Catacumba], [Yada] and [Aiohttp] have acceptable latency.
 
 {% asset_img all_errors.png All errors %}
 
-level of HTTP errors for big 3 are on similar level if delays grows.
+level of HTTP errors for the big 3 are on a similar level if delays grows.
 
 # Conclusion
 
-I i must choice i will chose bet wen [Yada], [Catacumba] and [Aiohttp]. [Catacumba] is extremely fast but new and offer much less than [Yada] in my opinion so for me is more about [Yada] vs [Aiohttp]. For simple things I think [Aiohttp] is best choice possible but for bigger may be [Yada] is better not only because [clojure] and [JVM] are better than [Python] in my opinion. I ill try implement more real live example in both and check if [Aiohttp] is steal winner in term of performance and code simplicity.
+If I must choose I will pick between [Yada], [Catacumba] and [Aiohttp]. [Catacumba] is extremely fast but new and offer much less than [Yada] in my opinion so for me It is more about [Yada] vs [Aiohttp]. For simple things I think [Aiohttp] is the best choice possible but for bigger maybe [Yada] is better. I will try to implement more real live examples in both and check if [Aiohttp] is still the winner in terms of performance and code simplicity.
 
 # Source Code
 
-You can generate/experiment with data by You own using code from [benchmark] repo.
+You can generate/experiment with data on your own using code from [benchmark] repo.
 
 
 [benchmark]: https://github.com/beetleman/clojure-vs-Python-web-benchmark
