@@ -1,9 +1,12 @@
 {
-  "name": "hexo-site",
+  "name": "beetleman.github.io",
   "version": "0.0.0",
   "private": true,
   "hexo": {
-    "version": "3.3.9"
+    "version": "3.7.1"
+  },
+  "scripts": {
+    "dev": "hexo serve --watch --draft"
   },
   "dependencies": {
     "hexo": "^3.2.0",
