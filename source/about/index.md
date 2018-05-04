@@ -3,12 +3,12 @@ title: about
 date: 2017-09-17 19:45:03
 ---
 
-# About Me (WIP)
+# About Me
 
-My name is Mateusz Probachta and I live in Kraków(Poland) and I coding stuff for a living. My adventure with code started almost 10 years ago and I realy happy with this chooice. I'm experienced in Python and JavaScript but my main coding passion is Clojure. I love functional style of programing and I try to follow “Mutable state is the root of all evil” in any language/technology I working on.
+My name is Mateusz Probachta and I live in Kraków(Poland) and I coding stuff for a living. My adventure with code started almost 10 years ago and I really happy with this choice. I'm experienced in Python and JavaScript but my main coding passion is Clojure. I love the functional style of programming and I try to follow “Mutable state is the root of all evil” in any language/technology I working on.
 
-I currently working for [PragmatiCoders][PC]. *[TODO: add few words about what I doing]*
+I currently working for [Ocean] as a full-stack developer.
 
-In my spare time I plays in Diablo II, coking and reading. Im fan of Sci-Fi and horror stories(mostly audio book).
+In my spare time I play in Diablo II, cooking vegan food and reading. I'm a fan of Sci-Fi and horror stories(mostly audiobook).
 
-[PC]: http://pragmaticcoders.com/
+[Ocean]: https://theoceanx.com/
