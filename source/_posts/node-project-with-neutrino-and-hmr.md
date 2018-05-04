@@ -4,7 +4,9 @@ tags:
   - node
   - neutrino
   - HMR
+date: 2018-05-04 22:47:33
 ---
+
 # Why?
 
 For frontend apps based on [React]/new-foo-framework-of-month, we are used to [HMR] its make development easier. On another hand, we still use nodaemon or manual restart for backend app. This solution work but destroy current state of the application during restart which can make debugging harder and startup of some apps is not a quick process.
